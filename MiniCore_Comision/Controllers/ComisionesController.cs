@@ -13,19 +13,25 @@ namespace MiniCore_Comision.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(decimal? minComision)
         {
             var resumen = _context.Vendedores
                 .Select(v => new ResumenComisionViewModel
                 {
                     NombreVendedor = v.Nombre,
-                    TotalVentas = v.Ventas.Sum(venta => venta.Monto),
-                    PorcentajeComision = 0.10m // 10%
+                    TotalVentas = v.Ventas.Sum(venta => venta.Monto)
                 })
                 .ToList();
 
+            if (minComision.HasValue)
+            {
+                resumen = resumen
+                    .Where(r => r.TotalComision >= minComision.Value)
+                    .ToList();
+            }
+
+            ViewBag.MinComision = minComision;
             return View(resumen);
         }
     }
 }
-
