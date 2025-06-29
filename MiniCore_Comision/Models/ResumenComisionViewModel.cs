@@ -5,9 +5,8 @@
         public string NombreVendedor { get; set; }
         public decimal TotalVentas { get; set; }
 
-        public decimal PorcentajeComision { get; set; } = 0.1m; // 10%
+        public decimal PorcentajeComision => CalculadorComision.ObtenerPorcentaje(TotalVentas);
 
-        public decimal TotalComision => TotalVentas * PorcentajeComision;
+        public decimal TotalComision => CalculadorComision.CalcularComision(TotalVentas);
     }
 }
-    
